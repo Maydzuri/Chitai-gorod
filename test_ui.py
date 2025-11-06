@@ -2,10 +2,8 @@ import pytest
 import allure
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from webdriver_manager.chrome import ChromeDriverManager
 from pages.search_ui_page import SearchPage
 from pages.cart_ui_page import AddToCart
 from pages.auth_ui_page import AuthPage
@@ -19,7 +17,13 @@ def driver():
 
     :yields: WebDriver - Экземпляр WebDriver
     """
-    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
+    # Настройка опций Chrome
+    options = webdriver.ChromeOptions()
+    options.add_argument("--no-sandbox")
+    options.add_argument("--disable-dev-shm-usage")
+
+    # Selenium Manager автоматически загрузит правильный ChromeDriver
+    driver = webdriver.Chrome(options=options)
     driver.maximize_window()
     driver.get(url_ui)
     yield driver
